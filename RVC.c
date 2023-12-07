@@ -6,19 +6,22 @@ struct Motor {
 	bool rTurnModule; //true일 때 오른쪽으로 90도 회전
 	bool lTurnModule; //true일 때 왼쪽으로 90도 회전
 	bool cleanerPowerUpModule; //true일 때 Power Up, false일 때 Power Off
-} m;
+};
+Motor m;
 
 struct SensorInterface {
 	bool rSensor; //우측 장애물 센서
 	bool fSensor; //전방 장애물 센서
 	bool lSensor; //좌측 장애물 센서
 	bool dustSensor; //먼지 센서
-} s; // 각 센서의 output wire와 연결
+}; // 각 센서의 output wire와 연결
+SensorInterface s;
 
 struct Checker {
 	bool obstLocation[3]; // left, front, right
 	bool dustExistence; // 먼지 여부
-} c; //RVC가 작동하기 위해 센서값을 Checker에 저장
+}; //RVC가 작동하기 위해 센서값을 Checker에 저장
+Checker c;
 
 bool* detObstacle(bool* arr);
 bool detDust();
@@ -33,10 +36,8 @@ int main() {
 	while (true) {
 		updateSensorSignal(); // Checker 모드
 
-		if (m.moveForwardModule == 0) { // 전진 중이 아닐 경우
-			if (!c.obstLocation[1]) { // 전방에 장애물이 없다면
-				moveForward(); // 전진
-			}
+		if (m.moveForwardModule == 0 && !c.obstLocation[1]) { // 전진 중이 아닐 경우 전방에 장애물이 없다면
+			moveForward(); // 전진
 		}
 
 		if (c.obstLocation[1] && !c.obstLocation[0]) { // 전방에 장애물이 있고 좌측에 장애물이 없을 때
